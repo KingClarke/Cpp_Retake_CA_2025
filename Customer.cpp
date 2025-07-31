@@ -98,7 +98,7 @@ public:
         return !(*this == other);
     }
 
-    // Overloaded stream insertion and extraction operators // ### check
+    // Overloaded stream insertion and extraction operators // ### check, copied form older project dont really undertant ###REMEMBER TO CHECK###
     friend ostream& operator<<(ostream& os, const Customer& c) {
         os << c.customerId << " " << c.title << " " << c.name << " " << c.numberOfPurchases << " " << c.type;
         for (int i = 0; i < c.numberOfPurchases; ++i) {
