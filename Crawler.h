@@ -1,19 +1,10 @@
 #pragma once
 #include "Bug.h"
-#include <cstdlib>
-#include <ctime>
 
 class Crawler : public Bug {
 public:
-    Crawler(int id, Position pos, Direction dir, int size)
-        : Bug(id, pos, dir, size) {
-        // Seed random only once per program run (best done in main honestly)
-        static bool seeded = false;
-        if (!seeded) {
-            srand(static_cast<unsigned int>(time(nullptr)));
-            seeded = true;
-        }
-    }
+    Crawler(int id, Position pos, Direction dir, int size);
+    virtual ~Crawler();
 
     // Check if the crawler is at the edge and facing out of bounds
     bool isWayBlocked() const override {
@@ -39,3 +30,5 @@ public:
             default: break;
         }
         path.push_back(position);
+    }
+};
