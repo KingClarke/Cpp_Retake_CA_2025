@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <ctime>
 #include <map>
+#include <thread>
 
 
 Board::Board() {
@@ -245,22 +246,65 @@ void Board::displayCells() const {
     }
 }
 
-void Board::checkLastBugStanding() const {
-    int aliveCount = 0;
-    Bug* lastBug = nullptr;
-    for (auto* b : bugs) {
-        if (b->isAlive()) {
-            ++aliveCount;
-            lastBug = b;
+void resolveFight(std::vector<Bug*>& bugsInCell) {
+    if (bugsInCell.empty()) return;
+
+    // Find the biggest size
+    int maxSize = 0;
+    for (auto* bug : bugsInCell) {
+        if (bug->isAlive() && bug->getSize() > maxSize) {
+            maxSize = bug->getSize();
         }
     }
 
-    if (aliveCount == 1 && lastBug != nullptr) {
-        std::cout << "Last Bug Standing: Bug " << lastBug->getId()
-                  << " (Size " << lastBug->getSize() << ") at ("
-                  << lastBug->getPosition().x << "," << lastBug->getPosition().y
-                  << ")\n";
+    // Collect all biggest bugs (could be more than one)
+    std::vector<Bug*> biggestBugs;
+    for (auto* bug : bugsInCell) {
+        if (bug->isAlive() && bug->getSize() == maxSize) {
+            biggestBugs.push_back(bug);
+        }
+    }
+
+    // Choose the winner
+    Bug* winner = nullptr;
+    if (biggestBugs.size() == 1) {
+        winner = biggestBugs[0];
     } else {
-        std::cout << aliveCount << " bugs remain in battle.\n";
+        // Multiple equal biggest bugs - pick one randomly
+        int idx = rand() % biggestBugs.size();
+        winner = biggestBugs[idx];
+    }
+
+    // Now the winner eats all the others
+    int totalSizeEaten = 0;
+    for (auto* bug : bugsInCell) {
+        if (bug != winner && bug->isAlive()) {
+            totalSizeEaten += bug->getSize();
+            bug->kill();
+            bug->setEatenBy(winner->getId());
+        }
+    }
+
+    winner->increaseSize(totalSizeEaten);
+}
+
+
+void Board::runSimulation() {
+    while (true) {
+        tap();
+        int aliveCount = 0;
+        for (auto bug : bugs) {
+            if (bug->isAlive()) {
+                aliveCount++;
+            }
+        }
+
+        if (aliveCount <= 1) {
+            std::cout << "Simulation finished! Only one bug remains, panting and victorious~" << std::endl;
+            break;
+        }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
+
