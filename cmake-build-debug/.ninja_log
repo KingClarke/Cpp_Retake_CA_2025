@@ -1,0 +1,13 @@
+# ninja log v6
+3	395	7757760231023323	build.ninja	df9f06f2e6b6247a
+43	630	7757758166597753	CMakeFiles/C__Retake.dir/Slitherer.cpp.obj	eca81d64dec70e82
+22	456	7757758166397651	CMakeFiles/C__Retake.dir/main.cpp.obj	c384afd93d630212
+32	307	7757759296350352	CMakeFiles/C__Retake.dir/Hopper.cpp.obj	e5328b62ee28db55
+30	543	7757760036255518	CMakeFiles/C__Retake.dir/BugApp.cpp.obj	7b783a0eed841088
+36	1356	7757760036315800	CMakeFiles/C__Retake.dir/Board.cpp.obj	4c600da441fecb52
+40	374	7757760036355761	CMakeFiles/C__Retake.dir/Crawler.cpp.obj	eed962dd3c0fdc69
+55	393	7757760254272518	CMakeFiles/C__Retake.dir/Customer.cpp.obj	be6439a9b53deb9e
+48	770	7757760254202550	CMakeFiles/C__Retake.dir/CustomerApp.cpp.obj	8f8938163735fa15
+770	1057	7757760261416529	C__Retake.exe	e80df996a77dd82c
+5	1421	7757765761104315	CMakeFiles/C__Retake.dir/Board.cpp.obj	4c600da441fecb52
+1422	1665	7757765775269102	C__Retake.exe	e80df996a77dd82c
