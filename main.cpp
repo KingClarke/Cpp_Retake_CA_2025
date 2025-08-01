@@ -7,42 +7,33 @@
 #include <algorithm>
 using namespace std;
 
-// Load customers from file (semicolon-separated format)
 void loadCustomers(vector<Customer>& customers, const string& filename) {
     ifstream infile(filename);
     if (!infile) return;
     string line;
     while (getline(infile, line)) {
-        stringstream ss(line);
-        string token;
-        int id, numPurchases;
-        string title, name, type;
+        size_t pos = 0;
+        vector<string> fields;
+        // Split line by ';'
+        while ((pos = line.find(';')) != string::npos) {
+            fields.push_back(line.substr(0, pos));
+            line.erase(0, pos + 1);
+        }
+        fields.push_back(line); // last field
 
-        // Parse CustomerId
-        getline(ss, token, ';');
-        id = stoi(token);
+        if (fields.size() < 5) continue; // not enough data check
 
-        // Parse Title
-        getline(ss, title, ';');
+        int id = stoi(fields[0]);
+        string title = fields[1];
+        string name = fields[2];
+        string type = fields[3];
+        int numPurchases = stoi(fields[4]);
 
-        // Parse Name
-        getline(ss, name, ';');
-
-        // Parse Type
-        getline(ss, type, ';');
-
-        // Parse Purchases_Count
-        getline(ss, token, ';');
-        numPurchases = stoi(token);
-
-        // Parse Purchase_Numbers
         int* purchases = nullptr;
-        if (numPurchases > 0) {
+        if (numPurchases > 0 && fields.size() >= 5 + numPurchases) {
             purchases = new int[numPurchases];
             for (int i = 0; i < numPurchases; ++i) {
-                if (getline(ss, token, ';')) {
-                    purchases[i] = stoi(token);
-                }
+                purchases[i] = stoi(fields[5 + i]);
             }
         }
 
