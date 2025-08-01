@@ -17,6 +17,4 @@ public:
     int getHopLength() const;
     bool isWayBlocked() const override;
 
-private:
-    Direction getRandomDirection() const;
 };
