@@ -8,6 +8,10 @@ private:
 public:
     Hopper(int id, Position position, Direction direction, int size, int hopLength)
         : Bug(id, position, direction, size), hopLength(hopLength) {}
+        
+    bool canEat(const Bug* other) const override {
+        return getSize() >= other->getSize(); // Hopper wins even on tie~
+    }
 
     void move() override;
 

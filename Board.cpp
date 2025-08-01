@@ -90,13 +90,69 @@ Bug* Board::findBug(int id) {
 }
 
 void Board::tap() {
+    std::cout << "Tapping the board... bugs will move.\n";
+
+    // Step 1: Move alive bugs
     for (auto bug : bugs) {
         if (bug->isAlive()) {
             bug->move();
         }
     }
-    std::cout << "All bugs have moved (tap)." << std::endl;
+
+    // Step 2: Group bugs by current cell
+    std::map<Position, std::vector<Bug*>> cellMap;
+    for (auto bug : bugs) {
+        if (bug->isAlive()) {
+            cellMap[bug->getPosition()].push_back(bug);
+        }
+    }
+
+    // Step 3: Resolve fights in each occupied cell
+    for (auto& [pos, bugsHere] : cellMap) {
+        if (bugsHere.size() < 2) continue;
+
+        // Find max size
+        int maxSize = 0;
+        for (auto* b : bugsHere) {
+            if (b->getSize() > maxSize) maxSize = b->getSize();
+        }
+
+        // Collect all contenders with max size
+        std::vector<Bug*> contenders;
+        for (auto* b : bugsHere) {
+            if (b->getSize() == maxSize) {
+                contenders.push_back(b);
+            }
+        }
+
+        // Choose winner (prefer hopper, else random)
+        Bug* winner = nullptr;
+        if (contenders.size() == 1) {
+            winner = contenders[0];
+        } else {
+            for (auto* c : contenders) {
+                if (dynamic_cast<Hopper*>(c)) {
+                    winner = c;
+                    break;
+                }
+            }
+            if (!winner) {
+                winner = contenders[rand() % contenders.size()];
+            }
+        }
+
+        // Winner eats all others
+        if (winner) {
+            winner->eat(bugsHere);
+            std::cout << "Bug " << winner->getId() << " ate others at ("
+                      << pos.x << "," << pos.y << ") and grew to size "
+                      << winner->getSize() << std::endl;
+        }
+    }
+
+    std::cout << "Tap completed.\n";
 }
+
 
 void Board::displayLifeHistory() const {
     for (const auto& bug : bugs) {
@@ -186,5 +242,25 @@ void Board::displayCells() const {
             }
             std::cout << std::endl;
         }
+    }
+}
+
+void Board::checkLastBugStanding() const {
+    int aliveCount = 0;
+    Bug* lastBug = nullptr;
+    for (auto* b : bugs) {
+        if (b->isAlive()) {
+            ++aliveCount;
+            lastBug = b;
+        }
+    }
+
+    if (aliveCount == 1 && lastBug != nullptr) {
+        std::cout << "Last Bug Standing: Bug " << lastBug->getId()
+                  << " (Size " << lastBug->getSize() << ") at ("
+                  << lastBug->getPosition().x << "," << lastBug->getPosition().y
+                  << ")\n";
+    } else {
+        std::cout << aliveCount << " bugs remain in battle.\n";
     }
 }

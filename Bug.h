@@ -35,6 +35,20 @@ public:
         return false;
     }
 
+    virtual bool canEat(const Bug* other) const {
+        return size > other->getSize();
+    }
+
+    virtual void eat(std::vector<Bug*>& bugsInCell) {
+        for (auto* other : bugsInCell) {
+            if (other != this && other->isAlive()) {
+                other->kill();
+                other->setEatenBy(this->getId());
+                this->increaseSize(other->getSize());
+            }
+        }
+    }
+
     int getId() const { return id; }
     bool isAlive() const { return alive; }
     Position getPosition() const { return position; }

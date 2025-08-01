@@ -9,7 +9,7 @@ void showMenu() {
     std::cout << "4. Tap the Bug Board (Move/Fight/Eat)\n";
     std::cout << "5. Display Life History of all Bugs\n";
     std::cout << "6. Display all Cells\n";
-    std::cout << "7. Run Simulation (Auto Tapping every 0.1s)\n";
+    std::cout << "7. Run Simulation (Auto Tapping every 1s)\n";
     std::cout << "8. Exit (Save Life Histories and Leave)\n";
     std::cout << "Choose your next move: ";
 }

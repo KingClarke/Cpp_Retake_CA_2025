@@ -58,4 +58,4 @@ void Hopper::move() {
     }
 
     setPosition(newPos); // updates both position and path
-}
+};
