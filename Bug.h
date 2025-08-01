@@ -35,7 +35,6 @@ public:
         return false;
     }
 
-// To be Implemented
     int getId() const { return id; }
     bool isAlive() const { return alive; }
     Position getPosition() const { return position; }

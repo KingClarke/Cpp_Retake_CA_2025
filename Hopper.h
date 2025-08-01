@@ -6,10 +6,11 @@ private:
     int hopLength;
 
 public:
-    Hopper(int id, Position pos, Direction dir, int size, int hopLen);
-    virtual ~Hopper();
+    Hopper(int id, Position position, Direction direction, int size, int hopLength)
+        : Bug(id, position, direction, size), hopLength(hopLength) {}
 
-    int getHopLength() const;
-    bool isWayBlocked() const override;
     void move() override;
+
+private:
+    Direction getRandomDirection() const;
 };

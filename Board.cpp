@@ -74,3 +74,21 @@ void Board::displayBugs() const {
         std::cout << (bug->isAlive() ? "Alive" : "Dead") << std::endl;
     }
 }
+
+Bug* Board::findBug(int id) {
+    for (auto bug : bugs) {
+        if (bug->getId() == id) {
+            return bug;
+        }
+    }
+    return nullptr;
+}
+
+void Board::tap() {
+    for (auto bug : bugs) {
+        if (bug->isAlive()) {
+            bug->move();
+        }
+    }
+    std::cout << "All bugs have moved (tap)." << std::endl;
+}
