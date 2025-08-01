@@ -7,4 +7,5 @@ public:
         : Bug(id, position, direction, size) {}
 
     void move() override;
+    bool isWayBlocked() const override;
 };

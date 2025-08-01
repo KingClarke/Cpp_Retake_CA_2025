@@ -12,6 +12,7 @@
 #include <ctime>
 #include <map>
 #include <thread>
+#include "Slitherer.h"
 
 
 Board::Board() {
@@ -44,9 +45,12 @@ void Board::loadBugs(const std::string& filename) {
                     bugs.push_back(new Crawler(id, pos, static_cast<Direction>(direction), size));
                 } else if (type == 'H' && stream >> hopLength) {
                     bugs.push_back(new Hopper(id, pos, static_cast<Direction>(direction), size, hopLength));
+                } else if (type == 'S') {
+                    bugs.push_back(new Slitherer(id, pos, static_cast<Direction>(direction), size));
                 } else {
                     std::cerr << "Invalid data for bug type " << type << std::endl;
                 }
+
             } else {
                 std::cerr << "Error parsing line: " << line << std::endl;
             }
@@ -65,7 +69,10 @@ void Board::displayBugs() const {
             std::cout << "Crawler ";
         } else if (dynamic_cast<const Hopper*>(bug)) {
             std::cout << "Hopper ";
+        } else if (dynamic_cast<const Slitherer*>(bug)) {
+            std::cout << "Slitherer ";
         }
+
         Position pos = bug->getPosition();
         std::cout << "(" << pos.x << "," << pos.y << ") ";
         std::cout << bug->getSize() << " ";
@@ -160,6 +167,7 @@ void Board::displayLifeHistory() const {
         std::cout << bug->getId() << " ";
         if (dynamic_cast<const Crawler*>(bug)) std::cout << "Crawler ";
         else if (dynamic_cast<const Hopper*>(bug)) std::cout << "Hopper ";
+        else if (dynamic_cast<const Slitherer*>(bug)) std::cout << "Slitherer ";
 
         std::cout << "Path: ";
         const auto& path = bug->getPath();
@@ -219,9 +227,11 @@ void Board::displayCells() const {
         Position pos = bug->getPosition();
         std::ostringstream entry;
         if (dynamic_cast<const Crawler*>(bug)) {
-            entry << "Crawler " << bug->getId();
+        entry << "Crawler " << bug->getId();
         } else if (dynamic_cast<const Hopper*>(bug)) {
             entry << "Hopper " << bug->getId();
+        } else if (dynamic_cast<const Slitherer*>(bug)) {
+            entry << "Slitherer " << bug->getId();
         }
 
         cellMap[pos].push_back(entry.str());

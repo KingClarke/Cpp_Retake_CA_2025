@@ -26,14 +26,8 @@ public:
     virtual ~Bug() = default;
     virtual void move() = 0;
 
-    bool isWayBlocked(const Position& newPos) const {
-        for (const auto& pos : path) {
-            if (pos == newPos) {
-                return true;
-            }
-        }
-        return false;
-    }
+    virtual bool isWayBlocked() const {
+    return false;}
 
     virtual bool canEat(const Bug* other) const {
         return size > other->getSize();

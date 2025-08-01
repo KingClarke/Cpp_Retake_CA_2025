@@ -5,6 +5,7 @@
 #include "Bug.h"
 #include "Crawler.h"
 #include "Hopper.h"
+#include "Slitherer.h"
 
 class Board {
 private:

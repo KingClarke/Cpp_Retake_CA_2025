@@ -14,6 +14,8 @@ public:
     }
 
     void move() override;
+    int getHopLength() const;
+    bool isWayBlocked() const override;
 
 private:
     Direction getRandomDirection() const;
