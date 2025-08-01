@@ -28,28 +28,34 @@ void Hopper::move() {
     while (isWayBlocked()) {
         direction = static_cast<Direction>(1 + rand() % 4);
     }
+
+    Position newPos = position;
     int actualHop = hopLength;
+
     switch (direction) {
         case Direction::North:
             if (position.y - hopLength < 0)
                 actualHop = position.y;
-            position.y -= actualHop;
+            newPos.y -= actualHop;
             break;
         case Direction::East:
             if (position.x + hopLength > 9)
                 actualHop = 9 - position.x;
-            position.x += actualHop;
+            newPos.x += actualHop;
             break;
         case Direction::South:
             if (position.y + hopLength > 9)
                 actualHop = 9 - position.y;
-            position.y += actualHop;
+            newPos.y += actualHop;
             break;
         case Direction::West:
             if (position.x - hopLength < 0)
                 actualHop = position.x;
-            position.x -= actualHop;
+            newPos.x -= actualHop;
             break;
         default:
             break;
     }
+
+    setPosition(newPos); // updates both position and path
+}

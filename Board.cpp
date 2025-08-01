@@ -10,6 +10,8 @@
 #include <chrono>
 #include <iomanip>
 #include <ctime>
+#include <map>
+
 
 Board::Board() {
     std::cout << "Board initialized.\n";
@@ -149,4 +151,40 @@ void Board::saveLifeHistoryToFile() const {
 
     out.close();
     std::cout << "Bug life histories saved to " << filename.str() << std::endl;
+}
+
+void Board::displayCells() const {
+    std::map<Position, std::vector<std::string>> cellMap;
+
+    for (auto bug : bugs) {
+        if (!bug->isAlive()) continue; // only count alive bugs
+
+        Position pos = bug->getPosition();
+        std::ostringstream entry;
+        if (dynamic_cast<const Crawler*>(bug)) {
+            entry << "Crawler " << bug->getId();
+        } else if (dynamic_cast<const Hopper*>(bug)) {
+            entry << "Hopper " << bug->getId();
+        }
+
+        cellMap[pos].push_back(entry.str());
+    }
+
+    for (int y = 0; y <= 9; ++y) {
+        for (int x = 0; x <= 9; ++x) {
+            Position pos{x, y};
+            std::cout << "(" << x << "," << y << "): ";
+            if (cellMap.count(pos) == 0) {
+                std::cout << "empty";
+            } else {
+                const auto& bugsHere = cellMap.at(pos);
+                for (size_t i = 0; i < bugsHere.size(); ++i) {
+                    std::cout << bugsHere[i];
+                    if (i < bugsHere.size() - 1)
+                        std::cout << ", ";
+                }
+            }
+            std::cout << std::endl;
+        }
+    }
 }
