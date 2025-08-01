@@ -7,6 +7,9 @@
 #include "Bug.h"
 #include "Crawler.h"
 #include "Hopper.h"
+#include <chrono>
+#include <iomanip>
+#include <ctime>
 
 Board::Board() {
     std::cout << "Board initialized.\n";
@@ -91,4 +94,59 @@ void Board::tap() {
         }
     }
     std::cout << "All bugs have moved (tap)." << std::endl;
+}
+
+void Board::displayLifeHistory() const {
+    for (const auto& bug : bugs) {
+        std::cout << bug->getId() << " ";
+        if (dynamic_cast<const Crawler*>(bug)) std::cout << "Crawler ";
+        else if (dynamic_cast<const Hopper*>(bug)) std::cout << "Hopper ";
+
+        std::cout << "Path: ";
+        const auto& path = bug->getPath();
+        for (const auto& pos : path) {
+            std::cout << "(" << pos.x << "," << pos.y << "),";
+        }
+
+        if (bug->isAlive()) {
+            std::cout << " Alive!" << std::endl;
+        } else {
+            std::cout << " Eaten by " << bug->getEatenBy() << std::endl;
+        }
+    }
+}
+
+void Board::saveLifeHistoryToFile() const {
+    auto now = std::chrono::system_clock::now();
+    std::time_t now_c = std::chrono::system_clock::to_time_t(now);
+    
+    std::ostringstream filename;
+    filename << "bugs_life_history_" << std::put_time(std::localtime(&now_c), "%Y%m%d_%H%M%S") << ".out";
+    
+    std::ofstream out(filename.str());
+    if (!out) {
+        std::cerr << "Error creating output file: " << filename.str() << std::endl;
+        return;
+    }
+
+    for (const auto& bug : bugs) {
+        out << bug->getId() << " ";
+        if (dynamic_cast<const Crawler*>(bug)) out << "Crawler ";
+        else if (dynamic_cast<const Hopper*>(bug)) out << "Hopper ";
+
+        out << "Path: ";
+        const auto& path = bug->getPath();
+        for (const auto& pos : path) {
+            out << "(" << pos.x << "," << pos.y << "),";
+        }
+
+        if (bug->isAlive()) {
+            out << " Alive!" << std::endl;
+        } else {
+            out << " Eaten by " << bug->getEatenBy() << std::endl;
+        }
+    }
+
+    out.close();
+    std::cout << "Bug life histories saved to " << filename.str() << std::endl;
 }

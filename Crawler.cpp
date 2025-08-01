@@ -21,12 +21,15 @@ void Crawler::move() {
     while (isWayBlocked()) {
         direction = static_cast<Direction>(1 + rand() % 4);
     }
+
+    Position newPos = position;
     switch (direction) {
-        case Direction::North: position.y -= 1; break;
-        case Direction::East:  position.x += 1; break;
-        case Direction::South: position.y += 1; break;
-        case Direction::West:  position.x -= 1; break;
+        case Direction::North: newPos.y -= 1; break;
+        case Direction::East:  newPos.x += 1; break;
+        case Direction::South: newPos.y += 1; break;
+        case Direction::West:  newPos.x -= 1; break;
         default: break;
     }
-    path.push_back(position);
+
+    setPosition(newPos); // Updates both position and path
 }
